@@ -6,7 +6,7 @@ import { CourseProgressService } from '../providers/course-progress.service';
 @Controller('course-progress')
 @ApiTags('course-progress')
 export class CourseProgressController {
-  constructor(private readonly progressService: CourseProgressService) {}
+  constructor(private readonly progressService: CourseProgressService) { }
 
   @Post('update-course-progress')
   @ApiOperation({ summary: 'Update course progress' })
@@ -41,7 +41,7 @@ export class CourseProgressController {
     },
   })
   async getProgress(@Param('enrollmentId') enrollmentId: string) {
-    return this.progressService.getProgress(enrollmentId);
+    return this.progressService.getCourseProgress(enrollmentId);
   }
 
   @Get(':enrollmentId/completion-rate')

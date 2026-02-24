@@ -34,6 +34,9 @@ export class User {
   })
   role: UserRole;
 
+  @Column({ type: 'varchar', length: 56, unique: true, nullable: true })
+  stellarPublicKey: string;
+
   @OneToMany(() => Course, (course) => course.professor)
   courses: Course[];
 

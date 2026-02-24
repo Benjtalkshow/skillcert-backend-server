@@ -11,7 +11,7 @@ export class CategoriesRepository {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-  ) {}
+  ) { }
 
   private applyDateFilters(
     queryBuilder: SelectQueryBuilder<Category>,
@@ -96,5 +96,12 @@ export class CategoriesRepository {
   async existsById(id: string): Promise<boolean> {
     const count = await this.categoryRepository.count({ where: { id } });
     return count > 0;
+  }
+
+  async findActiveCategories(): Promise<Category[]> {
+    return await this.categoryRepository.find({
+      where: { isActive: true },
+      order: { name: 'ASC' },
+    });
   }
 }

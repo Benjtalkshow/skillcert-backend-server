@@ -21,7 +21,7 @@ import { UsersService } from '../providers/users.service';
 @ApiTags('users')
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   /*
    * Brief description: Creates a new user in the system with the provided user data.
@@ -98,20 +98,11 @@ export class UsersController {
     data: UserResponseDto[];
     count: number;
   }> {
-    const pageNumber = parseInt(page, 10);
-    const limitNumber = parseInt(limit, 10);
-
-    const { users, total } = await this.usersService.findAll(
-      pageNumber,
-      limitNumber,
-    );
-
+    const users = await this.usersService.findAll();
     return {
       message: 'Users retrieved successfully',
       data: users,
-      total,
-      page: pageNumber,
-      limit: limitNumber,
+      count: users.length,
     };
   }
 

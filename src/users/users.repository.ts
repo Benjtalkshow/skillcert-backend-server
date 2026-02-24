@@ -11,7 +11,7 @@ export class UsersRepository {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   private applyDateFilters(
     queryBuilder: SelectQueryBuilder<User>,
@@ -91,6 +91,23 @@ export class UsersRepository {
     return await this.userRepository.findOne({
       where: { email },
     });
+  }
+
+  async findByStellarPublicKey(stellarPublicKey: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { stellarPublicKey },
+    });
+  }
+
+  /**
+   * Used specifically for authentication to retrieve the user's hashed password.
+   */
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
