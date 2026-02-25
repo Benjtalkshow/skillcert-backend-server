@@ -17,6 +17,13 @@ export class UserResponseDto {
   role: UserRole;
 
   @ApiPropertyOptional({
+    description: 'Stellar public key linked to the user account',
+    example: 'GB...',
+    nullable: true,
+  })
+  stellarPublicKey: string | null;
+
+  @ApiPropertyOptional({
     description: 'Linked Web3 wallet address',
     example: '0xAbCdEf1234567890AbCdEf1234567890AbCdEf12',
     nullable: true,

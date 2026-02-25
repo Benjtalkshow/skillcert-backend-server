@@ -34,6 +34,15 @@ export class CreateUserDto {
   role?: UserRole;
 
   @ApiPropertyOptional({
+    description: 'Stellar public key linked to the user account',
+    example: 'GB...',
+  })
+  @IsOptional()
+  @IsString()
+  @MinLength(56)
+  stellarPublicKey?: string;
+
+  @ApiPropertyOptional({
     description: 'Ethereum-compatible wallet address',
     example: '0xAbCdEf1234567890AbCdEf1234567890AbCdEf12',
   })

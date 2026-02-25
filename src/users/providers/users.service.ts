@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+// Constants
 import { PASSWORD_SALT_ROUNDS } from '../../common/constants';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LinkWalletDto } from '../dto/link-wallet.dto';
@@ -23,6 +24,7 @@ export class UsersService {
       name: user.name,
       email: user.email,
       role: user.role,
+      stellarPublicKey: user.stellarPublicKey ?? null,
       walletAddress: user.walletAddress ?? null,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -114,6 +116,18 @@ export class UsersService {
     }
 
     return this.toResponseDto(user);
+  }
+
+  /**
+   * Internal method used solely by AuthModule to validate credentials.
+   * Returns the user entity including the hashed password.
+   */
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return await this.usersRepository.findByEmailWithPassword(email);
+  }
+
+  async findByStellarPublicKey(publicKey: string): Promise<User | null> {
+    return await this.usersRepository.findByStellarPublicKey(publicKey);
   }
 
   /**

@@ -100,6 +100,23 @@ export class UsersRepository {
     });
   }
 
+  async findByStellarPublicKey(stellarPublicKey: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { stellarPublicKey },
+    });
+  }
+
+  /**
+   * Used specifically for authentication to retrieve the user's hashed password.
+   */
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
   /** Find a user by their linked wallet address (case-insensitive). */
   async findByWalletAddress(walletAddress: string): Promise<User | null> {
     return await this.userRepository.findOne({
@@ -107,7 +124,6 @@ export class UsersRepository {
       select: ['id', 'name', 'email', 'role', 'walletAddress', 'createdAt', 'updatedAt'],
     });
   }
-
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
     await this.userRepository.update(id, updateUserDto);
     return await this.findById(id);
